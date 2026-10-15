@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="fr" style="background:#ffffff;">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="color-scheme" content="light"/>
+  <title>Nadji Messal — BTS SIO SISR</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+  <style>
+    :root { color-scheme: light; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: #ffffff !important;
+      color: #1a1a1a !important;
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+    ::selection { background: #1a1a1a; color: #fff; }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { background: #1a1a1a; }
+
+    header {
+      background: #ffffff !important;
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .header-top {
+      padding: 1.2rem 2.5rem;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem; font-weight: 600; color: #1a1a1a;
+      text-decoration: none;
+    }
+    .header-meta {
+      font-size: 0.7rem; color: #888;
+      display: flex; align-items: center; gap: 0.6rem;
+    }
+    .dot-green {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #27ae60 !important; display: inline-block; flex-shrink: 0;
+    }
+
+    .tabs {
+      display: flex; border-top: 1px solid #e0e0e0;
+      overflow-x: auto; scrollbar-width: none;
+      background: #ffffff !important;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      flex-shrink: 0;
+      padding: 0.85rem 1.8rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.13em; text-transform: uppercase;
+      color: #888; background: #ffffff !important;
+      border: none; border-bottom: 2px solid transparent;
+      cursor: pointer; transition: all 0.2s; white-space: nowrap;
+    }
+    .tab-btn:hover { color: #1a1a1a; }
+    .tab-btn.active {
+      color: #1a1a1a;
+      border-bottom-color: #1a1a1a;
+    }
+
+    .page {
+      display: none;
+      background: #ffffff !important;
+      min-height: calc(100vh - 110px);
+      animation: fadeIn 0.3s ease;
+    }
+    #page-accueil { display: block; }
+    .page:target { display: block; }
+    body:has(.page:target) #page-accueil:not(:target) { display: none; }
+    .tabs .tab-btn { text-decoration: none; display: inline-block; }
+    body:not(:has(.page:target)) .tabs a[href="#page-accueil"],
+    body:has(#page-accueil:target) .tabs a[href="#page-accueil"],
+    body:has(#page-profil:target) .tabs a[href="#page-profil"],
+    body:has(#page-competences:target) .tabs a[href="#page-competences"],
+    body:has(#page-projets:target) .tabs a[href="#page-projets"],
+    body:has(#page-stage:target) .tabs a[href="#page-stage"],
+    body:has(#page-veille:target) .tabs a[href="#page-veille"],
+    body:has(#page-e5:target) .tabs a[href="#page-e5"],
+    body:has(#page-contact:target) .tabs a[href="#page-contact"] {
+      color: #1a1a1a; border-bottom-color: #1a1a1a;
+    }
+    @keyframes fadeIn {
+      from { opacity:0; transform: translateY(8px); }
+      to { opacity:1; transform:none; }
+    }
+
+    .page-inner {
+      max-width: 900px; margin: 0 auto;
+      padding: 3.5rem 2.5rem;
+    }
+
+    .page-label {
+      font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+      color: #888; margin-bottom: 0.4rem; display: block;
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      font-weight: 400; line-height: 0.95;
+      letter-spacing: -0.02em; color: #1a1a1a; margin-bottom: 2rem;
+    }
+    h1 em { font-style: italic; color: #888; }
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 400; letter-spacing: -0.02em; color: #1a1a1a;
+      margin-bottom: 2.5rem; line-height: 1.05;
+    }
+    h2 em { font-style: italic; color: #888; }
+
+    .divider {
+      border: none; border-top: 1px solid #e0e0e0;
+      margin: 2.5rem 0;
+    }
+
+    .hero-desc {
+      font-size: 0.92rem; color: #444; line-height: 1.9;
+      max-width: 560px; margin-bottom: 2.5rem;
+    }
+    .hero-bottom {
+      padding-top: 2rem; border-top: 1px solid #e0e0e0;
+      display: flex; gap: 0.8rem; flex-wrap: wrap; align-items: center;
+    }
+    .btn {
+      display: inline-block; font-family: 'DM Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0.7rem 1.4rem; text-decoration: none; cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-noir {
+      background: #1a1a1a !important; color: #fff !important; border: none;
+    }
+    .btn-noir:hover { background: #c0392b !important; }
+    .btn-blanc {
+      background: #fff !important; color: #1a1a1a !important;
+      border: 1px solid #d0d0d0;
+    }
+    .btn-blanc:hover { border-color: #1a1a1a; }
+
+    .info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    }
+    @media(max-width:640px) {
+      .info-grid { grid-template-columns:1fr; gap:2rem; }
+    }
+    .about-p {
+      font-size: 0.9rem; color: #444; line-height: 1.9;
+      margin-bottom: 1rem;
+    }
+    .about-p strong { color: #1a1a1a; font-weight: 600; }
+    .info-row {
+      display: flex; gap: 1rem;
+      padding: 0.8rem 0; border-bottom: 1px solid #e0e0e0;
+      font-size: 0.82rem;
+    }
+    .info-row:first-child { border-top: 1px solid #e0e0e0; }
+    .info-key {
+      color: #888; min-width: 115px; flex-shrink: 0; font-size: 0.75rem;
+    }
+    .info-val { color: #1a1a1a; }
+
+    .skills-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    }
+    @media(max-width:640px) {
+      .skills-grid { grid-template-columns:1fr; gap:2rem; }
+    }
+    .skills-cat {
+      font-size: 0.68rem; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #888; padding-bottom: 0.7rem;
+      border-bottom: 1px solid #e0e0e0; margin-bottom: 1.2rem;
+    }
+    .skill-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 0.7rem 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .skill-label { font-size: 0.82rem; color: #1a1a1a; flex: 1; }
+    .skill-track {
+      width: 80px; height: 2px; background: #e0e0e0;
+      position: relative; flex-shrink: 0;
+    }
+    .skill-bar {
+      position: absolute; left:0; top:0; height:2px;
+      background: #1a1a1a; width:0;
+      transition: width 1s ease;
+    }
+    .skill-bar.rouge { background: #c0392b; }
+    .skill-pct {
+      font-size: 0.68rem; color: #888; width: 26px; text-align: right;
+    }
+
+    .proj-card {
+      border: 1px solid #e0e0e0;
+      background: #ffffff !important;
+      margin-bottom: 1.5rem;
+    }
+    .proj-card-header {
+      padding: 1.4rem 1.8rem;
+      border-bottom: 1px solid #e0e0e0;
+      background: #fafafa !important;
+      display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    }
+    .proj-num {
+      font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+      border: 1px solid #1a1a1a; color: #1a1a1a;
+      padding: 0.2rem 0.65rem;
+    }
+    h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem; font-weight: 400; color: #1a1a1a;
+    }
+    .proj-body { padding: 1.8rem; }
+    .proj-sub {
+      font-size: 0.68rem; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #888; padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e0e0e0; margin-bottom: 1rem;
+    }
+    .proj-desc {
+      font-size: 0.85rem; color: #444; line-height: 1.85;
+      margin-bottom: 1.2rem;
+    }
+    .tasks { list-style: none; margin-bottom: 1.5rem; }
+    .tasks li {
+      font-size: 0.82rem; color: #444; line-height: 1.7;
+      padding: 0.45rem 0; border-bottom: 1px solid #f0f0f0;
+      display: flex; gap: 0.7rem;
+    }
+    .tasks li::before {
+      content: '→'; color: #1a1a1a; flex-shrink: 0;
+    }
+    .tags {
+      display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.5rem;
+    }
+    .tag {
+      font-size: 0.68rem; padding: 0.22rem 0.7rem;
+      border: 1px solid #d0d0d0; color: #555;
+      background: #ffffff !important;
+    }
+
+    .topo-box {
+      border: 1px solid #e0e0e0;
+      background: #fafafa !important;
+      padding: 1.5rem; overflow-x: auto;
+      margin: 1rem 0 1.5rem;
+    }
+    .topo-box svg { min-width: 500px; width: 100%; height: auto; }
+
+    .stage-head {
+      border-left: 3px solid #1a1a1a;
+      padding-left: 1.4rem; margin-bottom: 2.5rem;
+    }
+    .stage-company {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.7rem; color: #1a1a1a;
+    }
+    .stage-meta {
+      font-size: 0.75rem; color: #888; margin-top: 0.4rem; line-height: 1.7;
+    }
+    .mission {
+      padding: 1.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+    .mission:last-child { border-bottom: 1px solid #e0e0e0; }
+    .mission-num {
+      font-size: 0.65rem; color: #888; letter-spacing: 0.15em;
+      text-transform: uppercase; margin-bottom: 0.5rem;
+    }
+    .mission h3 { margin-bottom: 0.8rem; }
+    .mission p {
+      font-size: 0.83rem; color: #444; line-height: 1.8;
+    }
+
+    .veille-intro {
+      font-size: 0.88rem; color: #444; line-height: 1.9;
+      max-width: 700px; margin-bottom: 2rem;
+    }
+    .veille-grid {
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: 1px; background: #e0e0e0;
+      border: 1px solid #e0e0e0; margin-bottom: 2.5rem;
+    }
+    @media(max-width:640px) {
+      .veille-grid { grid-template-columns:1fr; }
+    }
+    .veille-cell {
+      background: #fff !important; padding: 1.4rem;
+    }
+    .veille-cell-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem; color: #d0d0d0; margin-bottom: 0.6rem;
+    }
+    .veille-cell-title {
+      font-size: 0.78rem; color: #1a1a1a;
+      margin-bottom: 0.5rem; font-weight: 600;
+    }
+    .veille-cell p {
+      font-size: 0.74rem; color: #666; line-height: 1.7;
+    }
+    .sources {
+      display: flex; flex-wrap: wrap; gap: 0.5rem;
+    }
+    .source {
+      font-size: 0.68rem; padding: 0.3rem 0.7rem;
+      border: 1px solid #d0d0d0; color: #555;
+    }
+
+    .contact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem;
+    }
+    @media(max-width:640px) {
+      .contact-grid { grid-template-columns:1fr; gap:2rem; }
+    }
+    .contact-link {
+      display: block; padding: 1rem 0;
+      border-bottom: 1px solid #e0e0e0;
+      color: #1a1a1a; text-decoration: none; font-size: 0.82rem;
+      transition: padding-left 0.2s;
+    }
+    .contact-link:first-child { border-top: 1px solid #e0e0e0; }
+    .contact-link:hover { padding-left: 0.5rem; color: #c0392b; }
+
+    footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 1.5rem 2.5rem;
+      display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      font-size: 0.65rem; color: #aaa;
+      background: #ffffff !important;
+    }
+
+    @media(max-width:600px) {
+      .header-top { padding: 1rem 1.2rem; }
+      .header-meta { display: none; }
+      .tab-btn { padding: 0.75rem 1rem; font-size: 0.62rem; }
+      .page-inner { padding: 2.5rem 1.3rem; }
+      footer { padding: 1.2rem; }
+    }
+
+    .e5-table-wrap {
+      overflow-x:auto;
+      border:1px solid #e0e0e0;
+      margin-top:1.5rem;
+    }
+    .e5-table {
+      width:100%;
+      min-width:760px;
+      border-collapse:collapse;
+      background:#fff;
+      font-size:0.72rem;
+    }
+    .e5-table th {
+      text-align:left;
+      background:#fafafa;
+      padding:0.9rem;
+      border-bottom:1px solid #d0d0d0;
+      border-right:1px solid #e8e8e8;
+      font-weight:600;
+      vertical-align:top;
+    }
+    .e5-table td {
+      padding:0.9rem;
+      border-bottom:1px solid #ededed;
+      border-right:1px solid #f0f0f0;
+      vertical-align:top;
+      line-height:1.55;
+      color:#444;
+    }
+    .e5-table tr:last-child td { border-bottom:none; }
+    .e5-table th:last-child,
+    .e5-table td:last-child { border-right:none; }
+    .e5-table .x {
+      text-align:center;
+      font-weight:700;
+      color:#1a1a1a;
+    }
+    .e5-note {
+      font-size:0.72rem;
+      color:#777;
+      line-height:1.7;
+      margin-top:0.8rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-top">
+    <a class="logo" href="#page-accueil">Nadji Messal</a>
+    <div class="header-meta">
+      <span class="dot-green"></span>
+      BTS SIO · SISR · 2026
+    </div>
+  </div>
+
+  <nav class="tabs">
+    <a class="tab-btn" href="#page-accueil">Accueil</a>
+    <a class="tab-btn" href="#page-profil">Profil</a>
+    <a class="tab-btn" href="#page-competences">Compétences</a>
+    <a class="tab-btn" href="#page-projets">Projets</a>
+    <a class="tab-btn" href="#page-stage">Stage</a>
+    <a class="tab-btn" href="#page-veille">Veille</a>
+    <a class="tab-btn" href="#page-e5">Tableau E5</a>
+    <a class="tab-btn" href="#page-contact">Contact</a>
+  </nav>
+</header>
+
+<!-- ACCUEIL -->
+<section class="page" id="page-accueil">
+  <div class="page-inner">
+    <span class="page-label">Portfolio · BTS SIO SISR</span>
+    <h1>Nadji<br><em>Messal</em></h1>
+
+    <p class="hero-desc">
+      Étudiant en deuxième année de BTS Services Informatiques aux Organisations,
+      option Solutions d'Infrastructure, Systèmes et Réseaux.
+      Je m'intéresse principalement aux réseaux informatiques,
+      à l'administration des systèmes et à la cybersécurité.
+    </p>
+
+    <div class="hero-bottom">
+      <a href="#page-projets" class="btn btn-noir">Voir mes projets</a>
+      <a href="#page-contact" class="btn btn-blanc">Me contacter</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- PROFIL -->
+<section class="page" id="page-profil">
+  <div class="page-inner">
+    <span class="page-label">01 · Profil</span>
+    <h2>Mon <em>parcours</em></h2>
+
+    <div class="info-grid">
+      <div>
+        <p class="about-p">
+          Je m'appelle <strong>Nadji Messal</strong> et je suis actuellement
+          étudiant en deuxième année de <strong>BTS SIO option SISR</strong>
+          au lycée Parc de Vilgénis à Massy.
+        </p>
+
+        <p class="about-p">
+          Avant mon BTS, j'ai obtenu un <strong>baccalauréat général</strong>
+          au lycée Alexandre Dumas à Saint-Cloud.
+        </p>
+
+        <p class="about-p">
+          Au cours de ma formation, j'ai développé des compétences dans
+          l'administration des systèmes, les réseaux, la virtualisation
+          et la sécurisation des infrastructures informatiques.
+        </p>
+      </div>
+
+      <div>
+        <div class="info-row">
+          <span class="info-key">Formation</span>
+          <span class="info-val">BTS SIO SISR</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Établissement</span>
+          <span class="info-val">Lycée Parc de Vilgénis · Massy</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Diplôme</span>
+          <span class="info-val">Baccalauréat général</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Lycée précédent</span>
+          <span class="info-val">Alexandre Dumas · Saint-Cloud</span>
+        </div>
+        <div class="info-row">
+          <span class="info-key">Spécialité</span>
+          <span class="info-val">Systèmes & Réseaux</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- COMPÉTENCES -->
+<section class="page" id="page-competences">
+  <div class="page-inner">
+    <span class="page-label">02 · Compétences</span>
+    <h2>Compétences <em>techniques</em></h2>
+
+    <div class="skills-grid">
+
+      <div>
+        <div class="skills-cat">Réseaux</div>
+
+        <div class="skill-row">
+          <span class="skill-label">VLAN</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">Routage inter-VLAN</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">ACL</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">Cisco Packet Tracer</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">DHCP / DNS</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="skills-cat">Systèmes & Infrastructure</div>
+
+        <div class="skill-row">
+          <span class="skill-label">Windows Server</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">Active Directory</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">Linux Debian</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">VMware</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">Proxmox VE</span>
+        </div>
+
+        <div class="skill-row">
+          <span class="skill-label">Cybersécurité</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- PROJETS -->
+<section class="page" id="page-projets">
+  <div class="page-inner">
+    <span class="page-label">03 · Projets</span>
+    <h2>Mes <em>réalisations</em></h2>
+
+    <div class="proj-card">
+      <div class="proj-card-header">
+        <span class="proj-num">Projet 01</span>
+        <h3>Architecture réseau — Musée du Louvre</h3>
+      </div>
+
+      <div class="proj-body">
+        <div class="proj-sub">Contexte</div>
+
+        <p class="proj-desc">
+          Réalisation d'une maquette d'infrastructure réseau basée sur le
+          Musée du Louvre. L'objectif était de mettre en place une architecture
+          permettant de séparer les différents services tout en assurant
+          leur communication et leur sécurité.
+        </p>
+
+        <div class="proj-sub">Éléments travaillés</div>
+
+        <ul class="tasks">
+          <li>Création et configuration de VLAN</li>
+          <li>Mise en place du routage inter-VLAN</li>
+          <li>Configuration des équipements Cisco</li>
+          <li>Mise en place d'ACL pour contrôler les communications</li>
+          <li>Tests de communication entre les différents réseaux</li>
+        </ul>
+
+        <div class="tags">
+          <span class="tag">Cisco</span>
+          <span class="tag">Packet Tracer</span>
+          <span class="tag">VLAN</span>
+          <span class="tag">ACL</span>
+          <span class="tag">Routage</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-card-header">
+        <span class="proj-num">Projet 02</span>
+        <h3>Administration Windows Server</h3>
+      </div>
+
+      <div class="proj-body">
+        <p class="proj-desc">
+          Mise en place et administration de services Windows Server
+          dans le cadre de ma formation en BTS SIO SISR.
+        </p>
+
+        <ul class="tasks">
+          <li>Installation et configuration de Windows Server</li>
+          <li>Mise en place d'Active Directory</li>
+          <li>Configuration des services DNS et DHCP</li>
+          <li>Gestion des utilisateurs et des groupes</li>
+          <li>Intégration de postes clients au domaine</li>
+        </ul>
+
+        <div class="tags">
+          <span class="tag">Windows Server</span>
+          <span class="tag">Active Directory</span>
+          <span class="tag">DNS</span>
+          <span class="tag">DHCP</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj-card">
+      <div class="proj-card-header">
+        <span class="proj-num">Projet 03</span>
+        <h3>Virtualisation & Proxmox</h3>
+      </div>
+
+      <div class="proj-body">
+        <p class="proj-desc">
+          Travail autour de la virtualisation avec le déploiement de
+          machines virtuelles et la découverte de plusieurs solutions
+          d'hypervision.
+        </p>
+
+        <ul class="tasks">
+          <li>Installation de Proxmox VE</li>
+          <li>Création et gestion de machines virtuelles</li>
+          <li>Utilisation de Windows Server et Debian</li>
+          <li>Création de modèles de machines virtuelles</li>
+          <li>Découverte des solutions VMware et Proxmox</li>
+        </ul>
+
+        <div class="tags">
+          <span class="tag">Proxmox</span>
+          <span class="tag">VMware</span>
+          <span class="tag">Debian</span>
+          <span class="tag">Virtualisation</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- STAGE -->
+<section class="page" id="page-stage">
+  <div class="page-inner">
+    <span class="page-label">04 · Stage</span>
+    <h2>Expérience <em>professionnelle</em></h2>
+
+    <div class="stage-head">
+      <div class="stage-company">Conseil départemental des Yvelines</div>
+      <div class="stage-meta">
+        Direction des Systèmes d'Information · Équipe Réseau et Infrastructure<br>
+        Du 1er juin au 3 juillet 2026
+      </div>
+    </div>
+
+    <p class="about-p">
+      J'ai effectué mon stage au sein de la DSI du Conseil départemental
+      des Yvelines. Cette expérience m'a permis de découvrir le fonctionnement
+      d'une infrastructure informatique professionnelle et de participer
+      à différentes missions liées aux systèmes, aux réseaux et à la sécurité.
+    </p>
+
+    <div class="mission">
+      <div class="mission-num">Mission 01</div>
+      <h3>Déploiement et sécurisation Windows</h3>
+      <p>
+        Participation à la création d'un master Windows destiné à uniformiser
+        le déploiement des postes de travail. J'ai également travaillé sur
+        la sécurisation de Windows Server 2025 avec Microsoft Security
+        Compliance Toolkit, le pare-feu, TLS 1.3 et la journalisation.
+      </p>
+    </div>
+
+    <div class="mission">
+      <div class="mission-num">Mission 02</div>
+      <h3>Sécurisation des accès — Cisco Duo</h3>
+      <p>
+        Travail autour de l'authentification multifacteur avec Cisco Duo
+        pour renforcer la sécurité des connexions RDP.
+        J'ai également découvert le Conditional Access,
+        le SSO et OpenID Connect.
+      </p>
+    </div>
+
+    <div class="mission">
+      <div class="mission-num">Mission 03</div>
+      <h3>Supervision réseau et infrastructure</h3>
+      <p>
+        Utilisation et découverte des outils Meraki et SolarWinds pour
+        la supervision du réseau. J'ai également découvert Secure Connect
+        Gateway et participé à des réunions techniques concernant les
+        pare-feux Palo Alto et la migration vers Windows Server 2025.
+      </p>
+    </div>
+
+    <div class="tags" style="margin-top:1.5rem;">
+      <span class="tag">Windows Server 2025</span>
+      <span class="tag">Cisco Duo</span>
+      <span class="tag">RDP</span>
+      <span class="tag">MFA</span>
+      <span class="tag">Meraki</span>
+      <span class="tag">SolarWinds</span>
+      <span class="tag">Palo Alto</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- VEILLE TECHNOLOGIQUE -->
+<section class="page" id="page-veille">
+  <div class="page-inner">
+    <span class="page-label">05 · Veille technologique</span>
+    <h2>VMware & <em>virtualisation</em></h2>
+
+    <p class="veille-intro">
+      Ma veille technologique porte sur VMware et sur l'évolution du marché
+      de la virtualisation. VMware est une solution très utilisée dans les
+      infrastructures informatiques pour créer et administrer des machines
+      virtuelles.
+    </p>
+
+    <div class="veille-grid">
+
+      <div class="veille-cell">
+        <div class="veille-cell-num">01</div>
+        <div class="veille-cell-title">VMware</div>
+        <p>
+          VMware propose plusieurs solutions de virtualisation utilisées
+          dans les infrastructures professionnelles.
+        </p>
+      </div>
+
+      <div class="veille-cell">
+        <div class="veille-cell-num">02</div>
+        <div class="veille-cell-title">ESXi & vCenter</div>
+        <p>
+          ESXi est un hyperviseur permettant d'exécuter plusieurs machines
+          virtuelles sur un serveur physique. vCenter permet de centraliser
+          l'administration de plusieurs serveurs et machines virtuelles.
+        </p>
+      </div>
+
+      <div class="veille-cell">
+        <div class="veille-cell-num">03</div>
+        <div class="veille-cell-title">Broadcom</div>
+        <p>
+          Le rachat de VMware par Broadcom en 2023 a entraîné des changements
+          importants dans les licences et la commercialisation des produits VMware.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="proj-sub">Évolution du marché</div>
+
+    <p class="about-p">
+      Le passage d'un système de licences perpétuelles à un modèle basé
+      principalement sur l'abonnement a modifié la stratégie de VMware.
+      Ces changements ont notamment amené certaines entreprises à étudier
+      d'autres solutions de virtualisation.
+    </p>
+
+    <p class="about-p">
+      Parmi les alternatives, on retrouve notamment <strong>Proxmox VE</strong>,
+      une solution open source permettant également de créer et gérer
+      des machines virtuelles.
+    </p>
+
+    <hr class="divider">
+
+    <div class="proj-sub">Sources utilisées pour ma veille</div>
+
+    <div class="sources">
+      <span class="source">Broadcom / VMware</span>
+      <span class="source">LeMagIT</span>
+      <span class="source">ZDNet</span>
+      <span class="source">Reddit</span>
+    </div>
+
+    <p class="e5-note">
+      Cette veille me permet de suivre les évolutions de la virtualisation,
+      des modèles de licences et des solutions alternatives utilisées
+      dans les infrastructures informatiques.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- TABLEAU E5 -->
+<section class="page" id="page-e5">
+  <div class="page-inner">
+    <span class="page-label">06 · Tableau de synthèse</span>
+    <h2>Tableau <em>E5</em></h2>
+
+    <p class="about-p">
+      Ce tableau présente une synthèse des réalisations effectuées pendant
+      ma formation et mon stage. Il permet de faire le lien entre mes
+      différentes activités et les compétences du BTS SIO.
+    </p>
+
+    <div class="e5-table-wrap">
+      <table class="e5-table">
+        <thead>
+          <tr>
+            <th>Réalisation</th>
+            <th>Gérer le patrimoine informatique</th>
+            <th>Répondre aux incidents et demandes</th>
+            <th>Développer la présence en ligne</th>
+            <th>Travailler en mode projet</th>
+            <th>Mettre à disposition un service</th>
+            <th>Développement professionnel</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr>
+            <td>
+              <strong>Architecture réseau — Musée du Louvre</strong><br>
+              VLAN, routage inter-VLAN, ACL et Cisco Packet Tracer
+            </td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td></td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td>
+              <strong>Administration Windows Server</strong><br>
+              Active Directory, DNS, DHCP et intégration des postes
+            </td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td></td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td>
+              <strong>Virtualisation — Proxmox</strong><br>
+              Déploiement et gestion de machines virtuelles
+            </td>
+            <td class="x">✓</td>
+            <td></td>
+            <td></td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+          </tr>
+
+          <tr>
+            <td>
+              <strong>Stage — Master Windows et sécurisation</strong><br>
+              Windows Server 2025 et sécurisation des systèmes
+            </td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td></td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+          </tr>
+
+          <tr>
+            <td>
+              <strong>Stage — Cisco Duo / MFA</strong><br>
+              Sécurisation des connexions RDP
+            </td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td></td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+          </tr>
+
+          <tr>
+            <td>
+              <strong>Stage — Supervision réseau</strong><br>
+              Meraki, SolarWinds et infrastructure
+            </td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td></td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+          </tr>
+
+          <tr>
+            <td>
+              <strong>Portfolio</strong><br>
+              Présentation de mon parcours, de mes projets et de mes compétences
+            </td>
+            <td></td>
+            <td></td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+            <td class="x">✓</td>
+          </tr>
+
+          <tr>
+            <td>
+              <strong>Veille technologique VMware</strong><br>
+              VMware, Broadcom, licences et alternatives
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="x">✓</td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <p class="e5-note">
+      Le tableau permet d'avoir une vue d'ensemble des compétences
+      mobilisées au cours de ma formation et de mes expériences.
+    </p>
+
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section class="page" id="page-contact">
+  <div class="page-inner">
+    <span class="page-label">07 · Contact</span>
+    <h2>Me <em>contacter</em></h2>
+
+    <div class="contact-grid">
+
+      <div>
+        <p class="about-p">
+          Vous pouvez me contacter par e-mail ou consulter mes différents
+          liens professionnels.
+        </p>
+      </div>
+
+      <div>
+        <a class="contact-link" href="mailto:messalnadji740@gmail.com">
+          E-mail — messalnadji740@gmail.com
+        </a>
+
+        <a class="contact-link"
+           href="https://github.com/Nadji922/portfolio-nadji"
+           target="_blank">
+          GitHub — Nadji922
+        </a>
+
+        <a class="contact-link"
+           href="https://linkedin.com/in/nadji-messal"
+           target="_blank">
+          LinkedIn — Nadji Messal
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <span>Nadji Messal — BTS SIO SISR</span>
+  <span>Lycée Parc de Vilgénis · 2026</span>
+</footer>
+
+</body>
+</html>
